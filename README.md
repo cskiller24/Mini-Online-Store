@@ -22,3 +22,5 @@
         - CRUD Product | D = Soft Delete
         - Update Product Status From Transactions
         - Restock Product
+    3. Additional
+        - Search
