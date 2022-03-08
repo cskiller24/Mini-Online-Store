@@ -1,10 +1,8 @@
 import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import React from "react";
-import { Link } from "react-router-dom";
 
-const Cart = ({ cart }) => {
+const Cart = ({ cart, updateCart }) => {
   return (
     <Paper
       elevation={3}
@@ -31,11 +29,19 @@ const Cart = ({ cart }) => {
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <ButtonGroup variant="contained">
-          <Button>
+          <Button
+            onClick={() => {
+              updateCart(cart.id, 0);
+            }}
+          >
             <RemoveIcon fontSize="small" />
           </Button>
-          <Button disabled>1000</Button>
-          <Button>
+          <Button disabled>{cart.quantity}</Button>
+          <Button
+            onClick={() => {
+              updateCart(cart.id, 1);
+            }}
+          >
             <AddIcon fontSize="small" />
           </Button>
         </ButtonGroup>

@@ -2,10 +2,7 @@ import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const Product = ({ product }) => {
-  const addToCart = () => {
-    console.log("clicked");
-  };
+const Product = ({ product, addToCart }) => {
   return (
     <Paper
       elevation={3}
@@ -37,7 +34,9 @@ const Product = ({ product }) => {
         <Button
           variant="contained"
           startIcon={<ShoppingCart />}
-          onClick={addToCart}
+          onClick={() => {
+            addToCart(product);
+          }}
         >
           Add to Cart
         </Button>

@@ -7,10 +7,42 @@ import NotFound from "./views/NotFound";
 import Login from "./views/Auth/Login";
 import User from "./views/layouts/User";
 import Admin from "./views/layouts/Admin";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Carts from "./views/Carts";
 
 function App() {
+  const addToCart = (product) => {
+    const cart = carts.find((cart) => cart.name === product.name);
+    if (cart) {
+      updateQuantity(cart.id, 1);
+      return;
+    }
+    const id = Math.floor(Math.random() * 1000) + 1;
+    const addProduct = { ...product, id: id, quantity: 1 };
+    setCart([...carts, addProduct]);
+  };
+  const updateQuantity = (id, method) => {
+    if (method === 1) {
+      // Add Quantity
+      let newCart = carts.map((cart) =>
+        cart.id === id ? { ...cart, quantity: cart.quantity + 1 } : cart
+      );
+      setCart(newCart);
+      return;
+    }
+    if (method === 0) {
+      // Decrease Quantity
+      let newCart = carts.map((cart) =>
+        cart.id === id && cart.quantity > 0
+          ? { ...cart, quantity: cart.quantity - 1 }
+          : cart
+      );
+
+      newCart = newCart.filter((cart) => cart.quantity > 0);
+      setCart(newCart);
+      return;
+    }
+  };
   const [products, setProducts] = useState([
     {
       id: "1",
@@ -90,15 +122,71 @@ function App() {
       quantity: 4,
       price: 1000,
     },
+    // {
+    //   id: 6,
+    //   name: "product 1",
+    //   image: "https://picsum.photos/200",
+    //   quantity: 4,
+    //   price: 1000,
+    // },
+    // {
+    //   id: 7,
+    //   name: "product 1",
+    //   image: "https://picsum.photos/200",
+    //   quantity: 4,
+    //   price: 1000,
+    // },
+    // {
+    //   id: 8,
+    //   name: "product 1",
+    //   image: "https://picsum.photos/200",
+    //   quantity: 4,
+    //   price: 1000,
+    // },
+    // {
+    //   id: 9,
+    //   name: "product 1",
+    //   image: "https://picsum.photos/200",
+    //   quantity: 4,
+    //   price: 1000,
+    // },
+    // {
+    //   id: 10,
+    //   name: "product 1",
+    //   image: "https://picsum.photos/200",
+    //   quantity: 4,
+    //   price: 1000,
+    // },
   ]);
+
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    let newTotal = 0;
+    carts.map((cart) => (newTotal += cart.price * cart.quantity));
+    setTotal(newTotal);
+  }, [carts]);
+
   return (
     <Routes>
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route element={<User />}>
-        <Route path="/" element={<Home products={products} />} />
+        <Route
+          path="/"
+          element={<Home products={products} addToCart={addToCart} />}
+        />
         <Route path="/about" element={<About />} />
-        <Route path="/cart" element={<Carts carts={carts} />} />
+        <Route
+          path="/cart"
+          element={
+            <Carts
+              carts={carts}
+              total={total}
+              updateQuantity={updateQuantity}
+            />
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/admin" element={<Admin />}>
