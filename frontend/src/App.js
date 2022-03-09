@@ -10,6 +10,8 @@ import Admin from "./views/layouts/Admin";
 import { useEffect, useState } from "react";
 import Carts from "./views/Carts";
 import Dashboard from "./views/admin/Dashboard";
+import Products from "./views/admin/Products";
+import Transactions from "./views/admin/Transactions";
 
 function App() {
   const addToCart = (product) => {
@@ -192,6 +194,8 @@ function App() {
       </Route>
       <Route path="/admin" element={<Admin />}>
         <Route path="" element={<Dashboard />} />
+        <Route path="products" element={<Products />} />
+        <Route path="transactions" element={<Transactions />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />
