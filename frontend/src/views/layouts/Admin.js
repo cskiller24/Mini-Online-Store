@@ -20,24 +20,6 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 import { Link as RouterLink, Outlet } from "react-router-dom";
 import Logout from "@mui/icons-material/Logout";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -197,11 +179,10 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Copyright sx={{ pt: 4 }} />
+            <Outlet />
           </Container>
         </Box>
       </Box>
-      <Outlet />
     </ThemeProvider>
   );
 }

@@ -9,6 +9,7 @@ import User from "./views/layouts/User";
 import Admin from "./views/layouts/Admin";
 import { useEffect, useState } from "react";
 import Carts from "./views/Carts";
+import Dashboard from "./views/admin/Dashboard";
 
 function App() {
   const addToCart = (product) => {
@@ -190,6 +191,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/admin" element={<Admin />}>
+        <Route path="" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />
