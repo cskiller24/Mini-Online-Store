@@ -12,6 +12,7 @@ import Carts from "./views/Carts";
 import Dashboard from "./views/admin/Dashboard";
 import Products from "./views/admin/Products";
 import Transactions from "./views/admin/Transactions";
+import Restock from "./views/admin/Restock";
 
 function App() {
   const addToCart = (product) => {
@@ -196,6 +197,7 @@ function App() {
         <Route path="" element={<Dashboard />} />
         <Route path="products" element={<Products />} />
         <Route path="transactions" element={<Transactions />} />
+        <Route path="restock" element={<Restock />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />

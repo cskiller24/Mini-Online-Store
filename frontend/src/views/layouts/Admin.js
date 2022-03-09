@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
+import InventoryIcon from "@mui/icons-material/Inventory";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -161,6 +161,28 @@ function DashboardContent() {
                   <CreditCardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Transactions" />
+              </ListItemButton>
+            </RouterLink>
+            <RouterLink
+              to="/admin/products"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <ShoppingCartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Products" />
+              </ListItemButton>
+            </RouterLink>
+            <RouterLink
+              to="/admin/restock"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <InventoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Restock Products" />
               </ListItemButton>
             </RouterLink>
           </List>
