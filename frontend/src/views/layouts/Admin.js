@@ -164,17 +164,6 @@ function DashboardContent() {
               </ListItemButton>
             </RouterLink>
             <RouterLink
-              to="/admin/products"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Products" />
-              </ListItemButton>
-            </RouterLink>
-            <RouterLink
               to="/admin/restock"
               style={{ textDecoration: "none", color: "inherit" }}
             >
