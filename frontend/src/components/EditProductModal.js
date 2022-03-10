@@ -1,9 +1,13 @@
 import { Button, Input, Modal, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
+import { Box } from "@mui/system";
+import React, { useEffect, useState } from "react";
 
-const ProductModal = ({ open, toggleOpen }) => {
+const EditProductModal = ({ product, open, toggleOpen }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -28,12 +32,14 @@ const ProductModal = ({ open, toggleOpen }) => {
     toggleOpen();
   };
 
+  useEffect(() => {
+    setName(product.name);
+    setPrice(product.price);
+    setDescription(product.description);
+  }, [product]);
+
   return (
-    <Modal
-      open={open}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={open}>
       <Box sx={style}>
         <Box
           sx={{
@@ -54,6 +60,8 @@ const ProductModal = ({ open, toggleOpen }) => {
             fullWidth
             label="Product Name"
             name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             sx={{ mt: 3 }}
           />
           <TextField
@@ -62,6 +70,8 @@ const ProductModal = ({ open, toggleOpen }) => {
             fullWidth
             label="Price"
             name="price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             sx={{ mt: 3 }}
             type="tel"
           />
@@ -71,6 +81,8 @@ const ProductModal = ({ open, toggleOpen }) => {
             fullWidth
             label="Description"
             name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             sx={{ mt: 3 }}
           />
           <label htmlFor="contained-button-file">
@@ -100,4 +112,4 @@ const ProductModal = ({ open, toggleOpen }) => {
   );
 };
 
-export default ProductModal;
+export default EditProductModal;

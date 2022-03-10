@@ -7,7 +7,6 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import React from "react";
 
 const Dashboard = () => {
-  const dashboard_test = [0, 1, 2, 3];
   return (
     <Grid component="main" container spacing={2}>
       <Grid item xs={4}>

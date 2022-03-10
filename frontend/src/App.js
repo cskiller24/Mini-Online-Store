@@ -195,7 +195,7 @@ function App() {
       </Route>
       <Route path="/admin" element={<Admin />}>
         <Route path="" element={<Dashboard />} />
-        <Route path="products" element={<Products />} />
+        <Route path="products" element={<Products products={products} />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="restock" element={<Restock />} />
         <Route path="*" element={<NotFound />} />

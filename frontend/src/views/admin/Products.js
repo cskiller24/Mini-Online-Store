@@ -1,8 +1,9 @@
-import { Box, Button, Paper } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
+import AdminProduct from "../../components/AdminProduct";
 import ProductModal from "../../components/ProductModal";
 
-const Products = () => {
+const Products = ({ products }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -18,7 +19,7 @@ const Products = () => {
       >
         Add Product
       </Button>
-      <ProductModal open={open} toggleOpen={() => setOpen(!open)} />
+      <ProductModal open={open} toggleOpen={() => setOpen(false)} />
       <Box
         sx={{
           display: "flex",
@@ -27,12 +28,9 @@ const Products = () => {
           justifyContent: "space-evenly",
         }}
       >
-        <Paper>TEST</Paper>
-        <Paper>TEST</Paper>
-        <Paper>TEST</Paper>
-        <Paper>TEST</Paper>
-        <Paper>TEST</Paper>
-        <Paper>TEST</Paper>
+        {products.map((product) => (
+          <AdminProduct product={product} key={product.id} />
+        ))}
       </Box>
     </>
   );
