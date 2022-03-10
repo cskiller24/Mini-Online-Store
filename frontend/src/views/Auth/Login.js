@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { Link as RouterLink } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();
@@ -76,7 +77,9 @@ const Login = () => {
             <Grid container>
               <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  <RouterLink to="/register">
+                    {"Don't have an account? Sign Up"}
+                  </RouterLink>
                 </Link>
               </Grid>
             </Grid>
