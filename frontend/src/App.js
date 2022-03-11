@@ -13,6 +13,8 @@ import Dashboard from "./views/admin/Dashboard";
 import Products from "./views/admin/Products";
 import Transactions from "./views/admin/Transactions";
 import Restock from "./views/admin/Restock";
+import { Products as TestProducts } from "./test/Products";
+import { Carts as TestCarts } from "./test/Carts";
 
 function App() {
   const addToCart = (product) => {
@@ -87,86 +89,9 @@ function App() {
     setProducts(addStock);
   };
 
-  const [products, setProducts] = useState([
-    {
-      id: "1",
-      name: "This product",
-      description: "This is a description for a product 1",
-      image: "https://picsum.photos/1000/200",
-      quantity: 10,
-      price: 20,
-    },
-    {
-      id: "2",
-      name: "This product 2",
-      description: "This is a description for a product 2",
-      image: "https://picsum.photos/200",
-      quantity: 20,
-      price: 40,
-    },
-    {
-      id: "3",
-      name: "This product 3",
-      description: "This is a description for a product 3",
-      image: "https://picsum.photos/200",
-      quantity: 20,
-      price: 1000,
-    },
-    {
-      id: "4",
-      name: "This product 3",
-      description: "This is a description for a product 3",
-      image: "https://picsum.photos/200",
-      quantity: 20,
-      price: 1000,
-    },
-    {
-      id: "5",
-      name: "This product 3",
-      description: "This is a description for a product 3",
-      image: "https://picsum.photos/200",
-      quantity: 20,
-      price: 1000,
-    },
-  ]);
+  const [products, setProducts] = useState(TestProducts);
 
-  const [carts, setCart] = useState([
-    {
-      id: 1,
-      name: "product 1",
-      image: "https://picsum.photos/200",
-      quantity: 4,
-      price: 1000,
-    },
-    {
-      id: 2,
-      name: "product 1",
-      image: "https://picsum.photos/200",
-      quantity: 4,
-      price: 1000,
-    },
-    {
-      id: 3,
-      name: "product 1",
-      image: "https://picsum.photos/200",
-      quantity: 4,
-      price: 1000,
-    },
-    {
-      id: 4,
-      name: "product 1",
-      image: "https://picsum.photos/200",
-      quantity: 4,
-      price: 1000,
-    },
-    {
-      id: 5,
-      name: "product 1",
-      image: "https://picsum.photos/200",
-      quantity: 4,
-      price: 1000,
-    },
-  ]);
+  const [carts, setCart] = useState(TestCarts);
 
   const [total, setTotal] = useState(0);
 
