@@ -54,7 +54,9 @@ function App() {
       id: Math.floor(Math.random() * 1000) + 1,
       name: product.name,
       description: product.description,
+      price: product.price,
       image: product.image,
+      quantity: product.quantity,
     };
 
     setProducts([...products, newProduct]);

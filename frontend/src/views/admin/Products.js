@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import AdminProduct from "../../components/AdminProduct";
 import ProductModal from "../../components/ProductModal";
 
-const Products = ({ products }) => {
+const Products = ({ products, addProduct }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -19,7 +19,11 @@ const Products = ({ products }) => {
       >
         Add Product
       </Button>
-      <ProductModal open={open} toggleOpen={() => setOpen(false)} />
+      <ProductModal
+        open={open}
+        toggleOpen={() => setOpen(false)}
+        addProduct={addProduct}
+      />
       <Box
         sx={{
           display: "flex",

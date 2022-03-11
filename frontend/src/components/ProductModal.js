@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 
-const ProductModal = ({ open, toggleOpen }) => {
+const ProductModal = ({ open, toggleOpen, addProduct }) => {
   const style = {
     position: "absolute",
     top: "50%",
@@ -19,12 +19,20 @@ const ProductModal = ({ open, toggleOpen }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
     console.log({
       name: data.get("name"),
       price: data.get("price"),
-      image: data.get("image"),
+      image: "https://picsum.photos/1000/200", // To change
+      quantity: 1,
     });
+
+    addProduct({
+      name: data.get("name"),
+      price: data.get("price"),
+      image: "https://picsum.photos/1000/200", // To change
+      quantity: 1,
+    });
+
     toggleOpen();
   };
 
