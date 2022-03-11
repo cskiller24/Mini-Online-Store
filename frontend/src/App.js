@@ -25,6 +25,7 @@ function App() {
     const addProduct = { ...product, id: id, quantity: 1 };
     setCart([...carts, addProduct]);
   };
+
   const updateQuantity = (id, method) => {
     if (method === 1) {
       // Add Quantity
@@ -47,6 +48,43 @@ function App() {
       return;
     }
   };
+
+  const addProduct = (product) => {
+    const newProduct = {
+      id: Math.floor(Math.random() * 1000) + 1,
+      name: product.name,
+      description: product.description,
+      image: product.image,
+    };
+
+    setProducts([...products, newProduct]);
+  };
+
+  const editProduct = (id, product) => {
+    const newEditProduct = products.map((existing) =>
+      existing.id === id
+        ? {
+            ...existing,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: product.image,
+          }
+        : existing
+    );
+    setProducts(newEditProduct);
+  };
+
+  const addStock = (id, stock) => {
+    const addStock = products.map((product) =>
+      product.id === id
+        ? { ...product, quantity: product.quantity + stock }
+        : product
+    );
+
+    setProducts(addStock);
+  };
+
   const [products, setProducts] = useState([
     {
       id: "1",
@@ -126,41 +164,6 @@ function App() {
       quantity: 4,
       price: 1000,
     },
-    // {
-    //   id: 6,
-    //   name: "product 1",
-    //   image: "https://picsum.photos/200",
-    //   quantity: 4,
-    //   price: 1000,
-    // },
-    // {
-    //   id: 7,
-    //   name: "product 1",
-    //   image: "https://picsum.photos/200",
-    //   quantity: 4,
-    //   price: 1000,
-    // },
-    // {
-    //   id: 8,
-    //   name: "product 1",
-    //   image: "https://picsum.photos/200",
-    //   quantity: 4,
-    //   price: 1000,
-    // },
-    // {
-    //   id: 9,
-    //   name: "product 1",
-    //   image: "https://picsum.photos/200",
-    //   quantity: 4,
-    //   price: 1000,
-    // },
-    // {
-    //   id: 10,
-    //   name: "product 1",
-    //   image: "https://picsum.photos/200",
-    //   quantity: 4,
-    //   price: 1000,
-    // },
   ]);
 
   const [total, setTotal] = useState(0);
@@ -195,9 +198,21 @@ function App() {
       </Route>
       <Route path="/admin" element={<Admin />}>
         <Route path="" element={<Dashboard />} />
-        <Route path="products" element={<Products products={products} />} />
+        <Route
+          path="products"
+          element={
+            <Products
+              products={products}
+              addProduct={addProduct}
+              editProduct={editProduct}
+            />
+          }
+        />
         <Route path="transactions" element={<Transactions />} />
-        <Route path="restock" element={<Restock />} />
+        <Route
+          path="restock"
+          element={<Restock products={products} addStock={addStock} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />
