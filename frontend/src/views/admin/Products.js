@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import AdminProduct from "../../components/AdminProduct";
 import ProductModal from "../../components/ProductModal";
 
-const Products = ({ products, addProduct }) => {
+const Products = ({ products, addProduct, editProduct }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -33,7 +33,11 @@ const Products = ({ products, addProduct }) => {
         }}
       >
         {products.map((product) => (
-          <AdminProduct product={product} key={product.id} />
+          <AdminProduct
+            product={product}
+            key={product.id}
+            editProduct={editProduct}
+          />
         ))}
       </Box>
     </>
