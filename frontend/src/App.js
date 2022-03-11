@@ -16,6 +16,7 @@ import Restock from "./views/admin/Restock";
 import { Products as TestProducts } from "./test/Products";
 import { Carts as TestCarts } from "./test/Carts";
 import { Transactions as TestTransactions } from "./test/Transactions";
+import CheckOut from "./views/CheckOut";
 
 function App() {
   const addToCart = (product) => {
@@ -98,6 +99,11 @@ function App() {
     setTransactions(updateTransaction);
   };
 
+  const addTransaction = (transaction) => {
+    setTransactions([...transactions, transaction]);
+    setCart([]);
+  };
+
   const cancelTransaction = (id) => {
     const updatedTransaction = transactions.map((transaction) =>
       transaction.id === id
@@ -148,6 +154,10 @@ function App() {
               updateQuantity={updateQuantity}
             />
           }
+        />
+        <Route
+          path="/checkout"
+          element={<CheckOut carts={carts} addTransaction={addTransaction} />}
         />
         <Route path="*" element={<NotFound />} />
       </Route>

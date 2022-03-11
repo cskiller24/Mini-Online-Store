@@ -64,6 +64,18 @@ const Transaction = ({ transaction, updateStatus }) => {
         <Typography>{transaction.id}</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography>Name:</Typography>
+          <Typography>{transaction.name}</Typography>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography>Contact #:</Typography>
+          <Typography>{transaction.contact_number}</Typography>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography>Address:</Typography>
+          <Typography>{transaction.address}</Typography>
+        </Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
