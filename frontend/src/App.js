@@ -1,7 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./views/Home";
-import About from "./views/About";
 import Register from "./views/Auth/Register";
 import NotFound from "./views/NotFound";
 import Login from "./views/Auth/Login";
@@ -12,6 +11,7 @@ import Carts from "./views/Carts";
 import Dashboard from "./views/admin/Dashboard";
 import Products from "./views/admin/Products";
 import Transactions from "./views/admin/Transactions";
+import UserTransactions from "./views/UserTransactions";
 import Restock from "./views/admin/Restock";
 import { Products as TestProducts } from "./test/Products";
 import { Carts as TestCarts } from "./test/Carts";
@@ -73,7 +73,7 @@ function App() {
             name: product.name,
             description: product.description,
             price: product.price,
-            image: product.image,
+            //image: product.image, TODO
           }
         : existing
     );
@@ -121,7 +121,7 @@ function App() {
           path="/"
           element={<Home products={products} addToCart={addToCart} />}
         />
-        <Route path="/about" element={<About />} />
+        <Route path="/transactions" element={<UserTransactions />} />
         <Route
           path="/cart"
           element={

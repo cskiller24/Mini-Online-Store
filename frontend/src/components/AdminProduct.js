@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import EditProductModal from "./EditProductModal";
 
-const AdminProduct = ({ product }) => {
+const AdminProduct = ({ product, editProduct }) => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <Paper
@@ -39,6 +39,7 @@ const AdminProduct = ({ product }) => {
           product={product}
           open={modalOpen}
           toggleOpen={() => setModalOpen(!modalOpen)}
+          editProduct={editProduct}
         />
       </Box>
     </Paper>

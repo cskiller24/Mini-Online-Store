@@ -3,7 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 
-const EditProductModal = ({ product, open, toggleOpen }) => {
+const EditProductModal = ({ product, open, toggleOpen, editProduct }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -22,13 +22,12 @@ const EditProductModal = ({ product, open, toggleOpen }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      name: data.get("name"),
-      price: data.get("price"),
-      image: data.get("image"),
-    });
+    const editedProduct = {
+      name: name,
+      price: price,
+      description: description,
+    };
+    editProduct(product.id, editedProduct);
     toggleOpen();
   };
 
@@ -49,7 +48,7 @@ const EditProductModal = ({ product, open, toggleOpen }) => {
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            Add Product
+            Edit Product
           </Typography>
           <CloseIcon onClick={toggleOpen} sx={{ cursor: "pointer" }} />
         </Box>
@@ -104,7 +103,7 @@ const EditProductModal = ({ product, open, toggleOpen }) => {
             </Button>
           </label>
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-            Add Product
+            Submit
           </Button>
         </Box>
       </Box>
