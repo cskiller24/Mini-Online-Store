@@ -1,6 +1,9 @@
 export const Transactions = [
   {
     id: 1,
+    name: "Juan Dela Cruz 5",
+    contact_number: "121213",
+    address: "Home Address",
     status: "Pending",
     products: [
       {
@@ -25,6 +28,9 @@ export const Transactions = [
   },
   {
     id: 2,
+    name: "Juan Dela Cruz 4",
+    contact_number: "121213",
+    address: "Home Address",
     status: "Pending",
     products: [
       {
@@ -43,6 +49,9 @@ export const Transactions = [
   },
   {
     id: 3,
+    name: "Juan Dela Cruz 3",
+    contact_number: "121213",
+    address: "Home Address",
     status: "Pending",
     products: [
       {
@@ -55,6 +64,9 @@ export const Transactions = [
   },
   {
     id: 4,
+    name: "Juan Dela Cruz",
+    contact_number: "121213",
+    address: "Home Address",
     status: "Pending",
     products: [
       {
