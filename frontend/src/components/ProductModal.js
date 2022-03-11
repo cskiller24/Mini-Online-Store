@@ -19,16 +19,11 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-      price: data.get("price"),
-      image: "https://picsum.photos/1000/200", // To change
-      quantity: 1,
-    });
 
     addProduct({
       name: data.get("name"),
       price: data.get("price"),
+      description: data.get("description"),
       image: "https://picsum.photos/1000/200", // To change
       quantity: 1,
     });
