@@ -33,7 +33,7 @@ const User = () => {
             </Link>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Link
-                to="/about"
+                to="/transactions"
                 style={{
                   color: "#fff",
                   textDecoration: "none",
