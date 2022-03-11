@@ -98,6 +98,15 @@ function App() {
     setTransactions(updateTransaction);
   };
 
+  const cancelTransaction = (id) => {
+    const updatedTransaction = transactions.map((transaction) =>
+      transaction.id === id
+        ? { ...transaction, status: "Cancelled" }
+        : transaction
+    );
+    setTransactions(updatedTransaction);
+  };
+
   const [products, setProducts] = useState(TestProducts);
 
   const [carts, setCart] = useState(TestCarts);
@@ -121,7 +130,15 @@ function App() {
           path="/"
           element={<Home products={products} addToCart={addToCart} />}
         />
-        <Route path="/transactions" element={<UserTransactions />} />
+        <Route
+          path="/transactions"
+          element={
+            <UserTransactions
+              transactions={transactions}
+              cancelTransaction={cancelTransaction}
+            />
+          }
+        />
         <Route
           path="/cart"
           element={
