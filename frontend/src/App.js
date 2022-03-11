@@ -15,6 +15,7 @@ import Transactions from "./views/admin/Transactions";
 import Restock from "./views/admin/Restock";
 import { Products as TestProducts } from "./test/Products";
 import { Carts as TestCarts } from "./test/Carts";
+import { Transactions as TestTransactions } from "./test/Transactions";
 
 function App() {
   const addToCart = (product) => {
@@ -89,9 +90,19 @@ function App() {
     setProducts(addStock);
   };
 
+  const updateStatus = (id, status) => {
+    const updateTransaction = transactions.map((transaction) =>
+      transaction.id === id ? { ...transaction, status: status } : transaction
+    );
+    //console.log(updateTransaction);
+    setTransactions(updateTransaction);
+  };
+
   const [products, setProducts] = useState(TestProducts);
 
   const [carts, setCart] = useState(TestCarts);
+
+  const [transactions, setTransactions] = useState(TestTransactions);
 
   const [total, setTotal] = useState(0);
 
@@ -135,7 +146,15 @@ function App() {
             />
           }
         />
-        <Route path="transactions" element={<Transactions />} />
+        <Route
+          path="transactions"
+          element={
+            <Transactions
+              transactions={transactions}
+              updateStatus={updateStatus}
+            />
+          }
+        />
         <Route
           path="restock"
           element={<Restock products={products} addStock={addStock} />}
