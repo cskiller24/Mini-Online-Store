@@ -78,7 +78,7 @@ function App() {
   const addStock = (id, stock) => {
     const addStock = products.map((product) =>
       product.id === id
-        ? { ...product, quantity: product.quantity + stock }
+        ? { ...product, quantity: parseInt(product.quantity) + parseInt(stock) }
         : product
     );
 
