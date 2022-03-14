@@ -1,9 +1,13 @@
 import { Button, Input, Modal, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
+import { Box } from "@mui/system";
+import React, { useEffect, useState } from "react";
 
-const ProductModal = ({ open, toggleOpen, addProduct }) => {
+const AdminEditProductModal = ({ product, open, toggleOpen, editProduct }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -18,25 +22,23 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    addProduct({
-      name: data.get("name"),
-      price: data.get("price"),
-      description: data.get("description"),
-      image: "https://picsum.photos/1000/200", // To change
-      quantity: 1,
-    });
-
+    const editedProduct = {
+      name: name,
+      price: price,
+      description: description,
+    };
+    editProduct(product.id, editedProduct);
     toggleOpen();
   };
 
+  useEffect(() => {
+    setName(product.name);
+    setPrice(product.price);
+    setDescription(product.description);
+  }, [product]);
+
   return (
-    <Modal
-      open={open}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={open}>
       <Box sx={style}>
         <Box
           sx={{
@@ -46,7 +48,7 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
           }}
         >
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            Add Product
+            Edit Product
           </Typography>
           <CloseIcon onClick={toggleOpen} sx={{ cursor: "pointer" }} />
         </Box>
@@ -57,6 +59,8 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
             fullWidth
             label="Product Name"
             name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             sx={{ mt: 3 }}
           />
           <TextField
@@ -65,6 +69,8 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
             fullWidth
             label="Price"
             name="price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             sx={{ mt: 3 }}
             type="tel"
           />
@@ -74,6 +80,8 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
             fullWidth
             label="Description"
             name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             sx={{ mt: 3 }}
           />
           <label htmlFor="contained-button-file">
@@ -95,7 +103,7 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
             </Button>
           </label>
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-            Add Product
+            Submit
           </Button>
         </Box>
       </Box>
@@ -103,4 +111,4 @@ const ProductModal = ({ open, toggleOpen, addProduct }) => {
   );
 };
 
-export default ProductModal;
+export default AdminEditProductModal;

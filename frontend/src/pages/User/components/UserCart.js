@@ -1,8 +1,9 @@
 import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import React from "react";
 
-const Cart = ({ cart, updateCart }) => {
+const UserCart = ({ cart, updateCart }) => {
   return (
     <Paper
       elevation={3}
@@ -50,4 +51,4 @@ const Cart = ({ cart, updateCart }) => {
   );
 };
 
-export default Cart;
+export default UserCart;

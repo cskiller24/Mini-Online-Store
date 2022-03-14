@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@mui/material";
 import React from "react";
 
-const TransactionCell = ({ product }) => {
+const AdminTransactionCell = ({ product }) => {
   return (
     <TableRow>
       <TableCell>{product.name}</TableCell>
@@ -11,4 +11,4 @@ const TransactionCell = ({ product }) => {
   );
 };
 
-export default TransactionCell;
+export default AdminTransactionCell;

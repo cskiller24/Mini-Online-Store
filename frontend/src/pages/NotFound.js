@@ -8,8 +8,13 @@ const NotFound = () => {
         Page Not Found
       </Typography>
       <Link to="/">
-        <Button variant="contained" sx={{ mt: 5 }}>
+        <Button variant="contained" sx={{ mt: 5, mx: 3 }}>
           Back to main
+        </Button>
+      </Link>
+      <Link to="/admin">
+        <Button variant="contained" sx={{ mt: 5, mx: 3 }}>
+          Back to main admin
         </Button>
       </Link>
     </Container>

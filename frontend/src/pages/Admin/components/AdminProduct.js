@@ -1,7 +1,7 @@
 import { Button, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import EditProductModal from "./EditProductModal";
+import AdminEditProductModal from "./AdminEditProductModal";
 
 const AdminProduct = ({ product, editProduct }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,7 +35,7 @@ const AdminProduct = ({ product, editProduct }) => {
         <Button variant="outlined" onClick={() => setModalOpen(true)}>
           Edit Product
         </Button>
-        <EditProductModal
+        <AdminEditProductModal
           product={product}
           open={modalOpen}
           toggleOpen={() => setModalOpen(!modalOpen)}

@@ -3,10 +3,11 @@ import { Box } from "@mui/system";
 import { useNavigate } from "react-router";
 import React from "react";
 
-const CheckOut = ({ carts, addTransaction }) => {
+const CheckOut = ({ checkout, addTransaction }) => {
   let navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const data = new FormData(e.currentTarget);
     const transaction = {
       id: Math.floor(Math.random() * 1000) + 1,
@@ -14,7 +15,7 @@ const CheckOut = ({ carts, addTransaction }) => {
       contact_number: data.get("contact_number"),
       address: data.get("address"),
       status: "Pending",
-      products: [...carts],
+      products: [...checkout],
     };
     addTransaction(transaction);
     navigate("/");
@@ -22,10 +23,10 @@ const CheckOut = ({ carts, addTransaction }) => {
 
   return (
     <>
-      {carts === [] ||
-      carts === null ||
-      carts === undefined ||
-      carts.length <= 0 ? (
+      {checkout === [] ||
+      checkout === null ||
+      checkout === undefined ||
+      checkout.length <= 0 ? (
         <Typography variant="h2" textAlign="center" sx={{ mt: 3 }}>
           Empty Cart
         </Typography>
@@ -44,6 +45,7 @@ const CheckOut = ({ carts, addTransaction }) => {
                     fullWidth
                     size="small"
                     name="name"
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -53,6 +55,7 @@ const CheckOut = ({ carts, addTransaction }) => {
                     name="contact_number"
                     fullWidth
                     size="small"
+                    required
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -62,6 +65,7 @@ const CheckOut = ({ carts, addTransaction }) => {
                     type="text"
                     fullWidth
                     size="small"
+                    required
                   />
                 </Grid>
                 <Grid item xs={12}>

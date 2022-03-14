@@ -1,9 +1,9 @@
 import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
-import AdminProduct from "../../components/AdminProduct";
-import ProductModal from "../../components/ProductModal";
+import AdminProduct from "./components/AdminProduct";
+import ProductModal from "./components/AdminProductModal";
 
-const Products = ({ products, addProduct, editProduct }) => {
+const AdminProducts = ({ products, addProduct, editProduct }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -44,4 +44,4 @@ const Products = ({ products, addProduct, editProduct }) => {
   );
 };
 
-export default Products;
+export default AdminProducts;

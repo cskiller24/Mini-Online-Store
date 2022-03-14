@@ -1,10 +1,10 @@
-import Transaction from "../../components/Transaction";
+import AdminTransaction from "./components/AdminTransaction";
 
-const Transactions = ({ transactions, updateStatus }) => {
+const AdminTransactions = ({ transactions, updateStatus }) => {
   return (
     <>
       {transactions.map((transaction) => (
-        <Transaction
+        <AdminTransaction
           transaction={transaction}
           key={transaction.id}
           updateStatus={updateStatus}
@@ -14,4 +14,4 @@ const Transactions = ({ transactions, updateStatus }) => {
   );
 };
 
-export default Transactions;
+export default AdminTransactions;

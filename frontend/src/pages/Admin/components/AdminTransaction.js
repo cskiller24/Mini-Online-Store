@@ -17,10 +17,10 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React, { useEffect, useState } from "react";
-import TransactionCell from "./TransactionCell";
+import AdminTransactionCell from "./AdminTransactionCell";
 import { Box } from "@mui/system";
 
-const Transaction = ({ transaction, updateStatus }) => {
+const AdminTransaction = ({ transaction, updateStatus }) => {
   const [status, setStatus] = useState(transaction.status);
   const [total, setTotal] = useState(0);
 
@@ -46,13 +46,14 @@ const Transaction = ({ transaction, updateStatus }) => {
     return true;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let tempTotal = 0;
     transaction.products.map(
       (product) => (tempTotal += product.price * product.quantity)
     );
     setTotal(tempTotal);
-  }, [transaction]);
+  });
 
   return (
     <Accordion>
@@ -87,7 +88,7 @@ const Transaction = ({ transaction, updateStatus }) => {
             </TableHead>
             <TableBody>
               {transaction.products.map((product) => (
-                <TransactionCell product={product} key={product.id} />
+                <AdminTransactionCell product={product} key={product.id} />
               ))}
             </TableBody>
             <TableFooter>
@@ -114,25 +115,25 @@ const Transaction = ({ transaction, updateStatus }) => {
                     >
                       <MenuItem
                         value="Pending"
-                        disabled={checkStatus("Pending", status)}
+                        disabled={checkStatus("Pending", transaction.status)}
                       >
                         Pending
                       </MenuItem>
                       <MenuItem
                         value="Shipped"
-                        disabled={checkStatus("Shipped", status)}
+                        disabled={checkStatus("Shipped", transaction.status)}
                       >
                         Shipped
                       </MenuItem>
                       <MenuItem
                         value="Delivered"
-                        disabled={checkStatus("Delivered", status)}
+                        disabled={checkStatus("Delivered", transaction.status)}
                       >
                         Delivered
                       </MenuItem>
                       <MenuItem
                         value="Cancer"
-                        disabled={checkStatus("Cancelled", status)}
+                        disabled={checkStatus("Cancelled", transaction.status)}
                       >
                         Cancelled
                       </MenuItem>
@@ -151,4 +152,4 @@ const Transaction = ({ transaction, updateStatus }) => {
   );
 };
 
-export default Transaction;
+export default AdminTransaction;

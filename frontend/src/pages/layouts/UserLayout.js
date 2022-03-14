@@ -4,9 +4,11 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, Outlet } from "react-router-dom";
 import InfoIcon from "@mui/icons-material/Info";
+import React from "react";
 
 const theme = createTheme();
-const User = () => {
+
+const UserLayout = () => {
   return (
     <ThemeProvider theme={theme}>
       <Grid component="main" maxWidth="xs">
@@ -45,7 +47,7 @@ const User = () => {
                 <InfoIcon fontSize="large" />
               </Link>
               <Link
-                to="/cart"
+                to="/carts"
                 style={{
                   color: "#fff",
                   textDecoration: "none",
@@ -79,4 +81,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserLayout;

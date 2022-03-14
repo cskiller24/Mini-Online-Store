@@ -8,9 +8,9 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import RestockCell from "../../components/RestockCell";
+import AdminRestockCell from "./components/AdminRestockCell";
 
-const Restock = ({ products, addStock }) => {
+const AdminRestock = ({ products, addStock }) => {
   return (
     <TableContainer component={Paper} elevation={6}>
       <Table>
@@ -24,7 +24,7 @@ const Restock = ({ products, addStock }) => {
         </TableHead>
         <TableBody>
           {products.map((row) => (
-            <RestockCell row={row} key={row.id} addStock={addStock} />
+            <AdminRestockCell row={row} key={row.id} addStock={addStock} />
           ))}
         </TableBody>
       </Table>
@@ -32,4 +32,4 @@ const Restock = ({ products, addStock }) => {
   );
 };
 
-export default Restock;
+export default AdminRestock;

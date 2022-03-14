@@ -1,5 +1,6 @@
 import { Paper } from "@mui/material";
-import UserTransaction from "./UserTransaction";
+import React from "react";
+import UserTransaction from "./components/UserTransaction";
 
 const UserTransactions = ({ transactions, cancelTransaction }) => {
   return (

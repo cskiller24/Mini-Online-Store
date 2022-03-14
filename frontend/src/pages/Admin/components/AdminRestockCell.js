@@ -2,7 +2,7 @@ import { Button, TableCell, TableRow, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 
-const RestockCell = ({ row, addStock }) => {
+const AdminRestockCell = ({ row, addStock }) => {
   const [quantity, setQuantity] = useState(0);
   const handleAddStockForm = (e) => {
     e.preventDefault();
@@ -38,4 +38,4 @@ const RestockCell = ({ row, addStock }) => {
   );
 };
 
-export default RestockCell;
+export default AdminRestockCell;

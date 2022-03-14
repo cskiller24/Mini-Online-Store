@@ -6,7 +6,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import React from "react";
 
-const Dashboard = () => {
+const AdminHome = () => {
   return (
     <Grid component="main" container spacing={2}>
       <Grid item xs={4}>
@@ -131,4 +131,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminHome;

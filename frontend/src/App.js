@@ -1,22 +1,22 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Home from "./views/Home";
-import Register from "./views/Auth/Register";
-import NotFound from "./views/NotFound";
-import Login from "./views/Auth/Login";
-import User from "./views/layouts/User";
-import Admin from "./views/layouts/Admin";
-import { useEffect, useState } from "react";
-import Carts from "./views/Carts";
-import Dashboard from "./views/admin/Dashboard";
-import Products from "./views/admin/Products";
-import Transactions from "./views/admin/Transactions";
-import UserTransactions from "./views/UserTransactions";
-import Restock from "./views/admin/Restock";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import { useState } from "react";
+import UserTransactions from "./pages/User/UserTransactions";
 import { Products as TestProducts } from "./test/Products";
 import { Carts as TestCarts } from "./test/Carts";
 import { Transactions as TestTransactions } from "./test/Transactions";
-import CheckOut from "./views/CheckOut";
+import UserCheckout from "./pages/User/UserCheckout";
+import UserLayout from "./pages/layouts/UserLayout";
+import AdminLayout from "./pages/layouts/AdminLayout";
+import UserHome from "./pages/User/UserHome";
+import UserCarts from "./pages/User/UserCarts";
+import AdminHome from "./pages/Admin/AdminHome";
+import AdminProducts from "./pages/Admin/AdminProducts";
+import AdminTransactions from "./pages/Admin/AdminTransactions";
+import AdminRestock from "./pages/Admin/AdminRestock";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const addToCart = (product) => {
@@ -119,22 +119,14 @@ function App() {
 
   const [transactions, setTransactions] = useState(TestTransactions);
 
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    let newTotal = 0;
-    carts.map((cart) => (newTotal += cart.price * cart.quantity));
-    setTotal(newTotal);
-  }, [carts]);
-
   return (
     <Routes>
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route element={<User />}>
+      <Route path="/" element={<UserLayout />}>
         <Route
-          path="/"
-          element={<Home products={products} addToCart={addToCart} />}
+          path=""
+          element={<UserHome products={products} addToCart={addToCart} />}
         />
         <Route
           path="/transactions"
@@ -146,27 +138,22 @@ function App() {
           }
         />
         <Route
-          path="/cart"
-          element={
-            <Carts
-              carts={carts}
-              total={total}
-              updateQuantity={updateQuantity}
-            />
-          }
+          path="/carts"
+          element={<UserCarts carts={carts} updateQuantity={updateQuantity} />}
         />
         <Route
           path="/checkout"
-          element={<CheckOut carts={carts} addTransaction={addTransaction} />}
+          element={
+            <UserCheckout checkout={carts} addTransaction={addTransaction} />
+          }
         />
-        <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path="/admin" element={<Admin />}>
-        <Route path="" element={<Dashboard />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="" element={<AdminHome />} />
         <Route
           path="products"
           element={
-            <Products
+            <AdminProducts
               products={products}
               addProduct={addProduct}
               editProduct={editProduct}
@@ -176,7 +163,7 @@ function App() {
         <Route
           path="transactions"
           element={
-            <Transactions
+            <AdminTransactions
               transactions={transactions}
               updateStatus={updateStatus}
             />
@@ -184,9 +171,8 @@ function App() {
         />
         <Route
           path="restock"
-          element={<Restock products={products} addStock={addStock} />}
+          element={<AdminRestock products={products} addStock={addStock} />}
         />
-        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
