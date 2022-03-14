@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->longText('address');
             $table->string('contact_number', 20);
-            $table->boolean('is_admin')->default(true);
+            $table->boolean('is_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
