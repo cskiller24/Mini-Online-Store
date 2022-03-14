@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users');
+            $table->string('status');
+            $table->longText('address');
+            $table->string('contact_number', 20);
             $table->timestamps();
         });
     }

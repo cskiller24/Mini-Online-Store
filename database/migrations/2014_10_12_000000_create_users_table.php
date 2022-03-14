@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->longText('address');
+            $table->string('contact_number', 20);
             $table->boolean('is_admin')->default(true);
             $table->rememberToken();
             $table->timestamps();
