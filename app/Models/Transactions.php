@@ -10,7 +10,6 @@ class Transactions extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'user_id',
         'status',
         'address',
@@ -18,6 +17,8 @@ class Transactions extends Model
     ];
 
     protected $table = 'transactions';
+
+    protected $keyType = 'string';
 
     public function user()
     {
