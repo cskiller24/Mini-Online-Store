@@ -15,6 +15,8 @@ class Cart extends Model
 
     protected $table = 'carts';
 
+    public $timestamps = false;
+
     public function user()
     {
         $this->belongsTo(User::class, 'user_id');
