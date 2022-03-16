@@ -18,7 +18,7 @@ class isAdmin
     public function handle(Request $request, Closure $next)
     {
         if (Auth::user() && Auth::user()->is_admin === 0) {
-            return response()->json(['message' => 'unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         return $next($request);
