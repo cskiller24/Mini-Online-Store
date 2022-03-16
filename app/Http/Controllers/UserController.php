@@ -8,6 +8,7 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
+        return response('granted');
     }
 
     public function get()
