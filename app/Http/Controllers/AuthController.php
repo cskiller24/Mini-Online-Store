@@ -2,12 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login()
-    {
 
+    public function login(LoginRequest $request)
+    {
+        $credentials = $request->validated();
+
+        if(!Auth::attempt($credentials)) {
+            return response('error credentials', 422);
+        }
+
+        $user = User::where(['email' => $credentials['email']])->first();
+
+        $token = $user->createToken(time())->plainTextToken;
+
+        return response(['token' => $token], 200);
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $credentials = $request->validated();
+
+        User::create($credentials);
+
+        return response(true);
+    }
+
+    public function logout()
+    {
+        return response(auth()->user()->tokens()->delete() === 9);
     }
 }
