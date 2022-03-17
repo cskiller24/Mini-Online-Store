@@ -20,8 +20,8 @@ class AuthController extends Controller
             ], 401);
         }
 
+        //Get user to create token
         $user = User::where(['email' => $credentials['email']])->first();
-
         $token = $user->createToken(time())->plainTextToken;
 
         return response()->json(['token' => $token], 200);
@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         User::create($credentials);
 
-        return response(true);
+        return response(1, 201);
     }
 
     public function logout()
