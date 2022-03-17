@@ -94,7 +94,9 @@ class ProductController extends Controller
             ], 400);
         }
 
-        Storage::disk('public')->delete('image/'. $product->image);
+        if($product->image !== self::NOT_AVAILABLE_IMAGE) {
+            Storage::disk('public')->delete('image/'. $product->image);
+        }
 
         $product->name = $request->name;
         $product->price = $request->price;
@@ -105,7 +107,7 @@ class ProductController extends Controller
 
         return response()->json([
             'product' => ProductResource::collection($product->get())
-        ], 201);
+        ], 200);
     }
 
     /**
@@ -124,12 +126,15 @@ class ProductController extends Controller
             ], 400);
         }
 
-        Storage::disk('public')->delete('image/'. $product->image);
+        if($product->image !== self::NOT_AVAILABLE_IMAGE) {
+            Storage::disk('public')->delete('image/'. $product->image);
+        }
+
         $product->image = self::NOT_AVAILABLE_IMAGE;
         $product->save();
         $product->delete();
 
-        return response(1, 200);
+        return response(1);
     }
 
     public function restock(Request $request, $id)
