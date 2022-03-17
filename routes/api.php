@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,10 +27,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['user']], function () {
         Route::get('/', [UserController::class, 'store']);
     });
-
     Route::group(['middleware' => ['admin']], function () {
-        Route::get('/products', [ProductController::class, 'test']);
+        Route::controller(ProductController::class)->group(function () {
+            Route::get('/products', 'index');
+            Route::post('/product/create', 'store');
+            Route::get('/product/{id}', 'show');
+            Route::post('/product/update/{id}', 'update');
+            Route::delete('/product/delete/{id}', 'destroy');
+            Route::post('/product/restock/{id}', 'restock');
+        });
+        Route::put('/product/{id}/restock', [ProductController::class, 'restock']);
     });
-
     Route::post('/logout', [AuthController::class, 'logout']);
 });
