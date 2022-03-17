@@ -15,14 +15,16 @@ class AuthController extends Controller
         $credentials = $request->validated();
 
         if(!Auth::attempt($credentials)) {
-            return response('error credentials', 422);
+            return response()->json([
+                'message' => 'Email or Password does not exist'
+            ], 401);
         }
 
         $user = User::where(['email' => $credentials['email']])->first();
 
         $token = $user->createToken(time())->plainTextToken;
 
-        return response(['token' => $token], 200);
+        return response()->json(['token' => $token], 200);
     }
 
     public function register(RegisterRequest $request)
