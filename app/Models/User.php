@@ -27,11 +27,11 @@ class User extends Authenticatable
 
     public function cart()
     {
-        $this->hasMany(Cart::class, 'user_id');
+        return $this->hasMany(Cart::class, 'user_id', 'id');
     }
 
     public function transactions()
     {
-        $this->hasMany(Transactions::class);
+        return $this->hasMany(Transactions::class);
     }
 }

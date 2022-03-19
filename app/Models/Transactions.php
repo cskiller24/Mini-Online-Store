@@ -22,12 +22,12 @@ class Transactions extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function transaction()
     {
-        $this->hasMany(Transaction::class, 'transaction_id');
+        return $this->hasMany(Transaction::class, 'transaction_id');
     }
 
 }

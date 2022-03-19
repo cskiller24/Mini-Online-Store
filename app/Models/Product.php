@@ -22,11 +22,11 @@ class Product extends Model
 
     public function cart()
     {
-        $this->hasMany(Cart::class, 'product_id');
+        return $this->hasMany(Cart::class, 'product_id');
     }
 
     public function transaction()
     {
-        $this->hasMany(Transaction::class, 'product_id');
+        return $this->hasMany(Transaction::class, 'product_id');
     }
 }
