@@ -29,33 +29,51 @@ class CartController extends Controller
     public function addCart(Request $request)
     {
         $request->validate([
-            'product_id' => 'required',
-            'quantity' => 'required|numeric|gt:0'
+            'product_id' => 'required|exists:products,id',
         ]);
 
-        try {
-            $cart = Cart::updateOrCreate([
+        $cart = Cart::where([
                 'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id],
-                ['quantity' => $request->quantity]);
-        } catch (\Exception $e) {
+                'product_id' => $request->product_id
+            ])->first();
+
+        if (!$cart) {
+            $newCart = Cart::create([
+                'user_id' => auth()->user()->id,
+                'product_id' => $request->product_id,
+                'quantity' => '1'
+            ]);
             return response()->json([
-                'message' => 'Something went wrong in adding cart',
-                'ERROR' => $e->getMessage()
-            ], 500);
+                'message' => 'Successfully Added Cart',
+                'data' => [
+                    'cart' => $newCart
+                ],
+            ]);
+        }
+
+        if($cart) {
+            Cart::where([
+                'user_id' => auth()->user()->id,
+                'product_id' => $request->product_id
+            ])->update(['quantity' => $cart->quantity + 1]);
+            $cart->quantity += 1;
+            return response()->json([
+                'message' => 'Successfully Added Cart',
+                'data' => [
+                    'cart' => $cart
+                ],
+            ]);
         }
 
         return response()->json([
-            'message' => 'Successfully Added Cart',
-            'cart' => $cart
-        ]);
+                'message' => 'Something went wrong in adding cart',
+            ], 500);
     }
 
     public function decreaseCart(Request $request)
     {
         $request->validate([
-            'product_id' => 'required',
-            'quantity' => 'required|numeric|gt:0'
+            'product_id' => 'required|exists:products,id',
         ]);
 
         $cart = Cart::where([
@@ -66,25 +84,35 @@ class CartController extends Controller
         if (!$cart) {
             return response()->json([
                 'message' => 'Something went wrong in adding cart',
+                'error' => 'Cart does not exist'
             ], 500);
         }
 
         if($cart->quantity === 1) {
-            $cart->delete();
+            Cart::where([
+                'user_id' => auth()->user()->id,
+                'product_id' => $request->product_id
+            ])->delete();
+
+            return response()->json([
+                'message' => 'Successfully removed cart',
+                'cart' => 1
+            ]);
         }
 
         if($cart->quantity > 1) {
+            Cart::where([
+                'user_id' => auth()->user()->id,
+                'product_id' => $request->product_id
+            ])->update(['quantity' => $cart->quantity - 1]);
             $cart->quantity -= 1;
-            $cart->save();
+
+            return response()->json([
+                'message' => 'Successfully removed cart',
+                'cart' => $cart
+            ]);
         }
 
-        return response()->json([
-            'message' => 'Successfully removed cart'
-        ]);
-    }
-
-    public function destroy(Request $request)
-    {
 
     }
 }
