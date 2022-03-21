@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,11 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['user']], function () {
-        Route::get('/', [UserController::class, 'store']);
+        Route::controller(CartController::class)->group(function () {
+            Route::get('/carts', 'index');
+            Route::put('/cart/add', 'addCart');
+            Route::put('/cart/decrease', 'decreaseCart');
+        });
     });
     Route::group(['middleware' => ['admin']], function () {
         Route::controller(ProductController::class)->group(function () {
