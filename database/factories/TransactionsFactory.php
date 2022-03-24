@@ -24,7 +24,7 @@ class TransactionsFactory extends Factory
     {
         $user = User::inRandomOrder()->first();
         return [
-            'id' => Str::uuid(),
+            'reference_id' => Str::uuid(),
             'user_id' => $user->id,
             'status' => $this->faker->numberBetween(0, 2),
             'address' => $user->address,
