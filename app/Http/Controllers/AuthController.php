@@ -40,6 +40,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        \auth('web')->logout();
         return response(auth()->user()->tokens()->delete() === 9);
     }
 }
