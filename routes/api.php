@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::group(['middleware' => ['guest']], function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['user']], function () {
@@ -30,6 +33,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/carts', 'index');
             Route::put('/cart/add', 'addCart');
             Route::put('/cart/decrease', 'decreaseCart');
+        });
+        Route::controller(TransactionsController::class)->group(function () {
+            Route::get('/transaction', 'show');
+            Route::post('/transaction/create', 'store');
         });
     });
     Route::group(['middleware' => ['admin']], function () {
@@ -39,9 +46,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/product/{id}', 'show');
             Route::post('/product/update/{id}', 'update');
             Route::delete('/product/delete/{id}', 'destroy');
-            Route::post('/product/restock/{id}', 'restock');
+            Route::put('/product/restock/{id}', 'restock');
         });
-        Route::put('/product/{id}/restock', [ProductController::class, 'restock']);
+        Route::get('/transactions', [TransactionsController::class, 'index']);
     });
+    Route::put('/transaction/update', [TransactionsController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
