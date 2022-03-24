@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CartResource;
-use App\Http\Resources\UserForCartResource;
-use App\Models\Cart;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    //Show all carts
     public function index()
     {
-        $cart = CartResource::collection(
-            Cart::with('product')
-            ->where('user_id', 3)->get());
-        $user = UserForCartResource::collection(
-            User::where('id', 3)
-            ->get()
-        );
+        $user = User::with('cart')->paginate(20);
 
         return response()->json([
             'user' => $user,
-            'cart' => $cart,
         ]);
     }
 
@@ -32,87 +25,44 @@ class CartController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
-        $cart = Cart::where([
-                'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id
-            ])->first();
+        $user = User::where('id', auth()->user()->id)->first();
 
-        if (!$cart) {
-            $newCart = Cart::create([
-                'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id,
-                'quantity' => '1'
-            ]);
-            return response()->json([
-                'message' => 'Successfully Added Cart',
-                'data' => [
-                    'cart' => $newCart
-                ],
-            ]);
-        }
+        $quantity = DB::table('carts')
+            ->where('user_id', auth()->user()->id)
+            ->where('product_id', $request->product_id)->value('quantity');
 
-        if($cart) {
-            Cart::where([
-                'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id
-            ])->update(['quantity' => $cart->quantity + 1]);
-            $cart->quantity += 1;
-            return response()->json([
-                'message' => 'Successfully Added Cart',
-                'data' => [
-                    'cart' => $cart
-                ],
-            ]);
-        }
+        $user->cart()->sync([$request->product_id => ['quantity' => $quantity + 1]], false);
 
         return response()->json([
-                'message' => 'Something went wrong in adding cart',
-            ], 500);
+            'message' => 'Successfully Added Cart',
+        ]);
     }
 
     public function decreaseCart(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:products,id|exists:carts,product_id',
         ]);
 
-        $cart = Cart::where([
-                'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id,
-            ])->first();
+        $user = User::where('id', auth()->user()->id)->first();
 
-        if (!$cart) {
-            return response()->json([
-                'message' => 'Something went wrong in adding cart',
-                'error' => 'Cart does not exist'
-            ], 500);
-        }
+        $quantity = DB::table('carts')
+            ->where('user_id', auth()->user()->id)
+            ->where('product_id', $request->product_id)
+            ->value('quantity');
+        if($quantity == 1) {
+            $user->cart()->detach($request->product_id);
 
-        if($cart->quantity === 1) {
-            Cart::where([
-                'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id
-            ])->delete();
-
-            return response()->json([
-                'message' => 'Successfully removed cart',
-                'cart' => 1
+            return \response()->json([
+                'message' => 'Successfully removed cart'
             ]);
         }
 
-        if($cart->quantity > 1) {
-            Cart::where([
-                'user_id' => auth()->user()->id,
-                'product_id' => $request->product_id
-            ])->update(['quantity' => $cart->quantity - 1]);
-            $cart->quantity -= 1;
+        $user->cart()->sync([$request->product_id => ['quantity' => $quantity - 1]], false);
 
-            return response()->json([
-                'message' => 'Successfully removed cart',
-                'cart' => $cart
-            ]);
-        }
-
-
+        return \response()->json([
+            'message' => 'Successfully decreased cart'
+        ]);
     }
+
 }

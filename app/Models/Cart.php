@@ -15,8 +15,6 @@ class Cart extends Model
         'quantity',
     ];
 
-    protected $primary_key = null;
-
     protected $table = 'carts';
 
     public $timestamps = false;
