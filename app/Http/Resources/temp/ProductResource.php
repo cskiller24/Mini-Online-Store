@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\temp;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserForCartResource extends JsonResource
+class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +17,10 @@ class UserForCartResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'address' => $this->address,
-            'contact_number' => $this->contact_number
+            'quantity' => $this->quantity,
+            'price' => $this->price,
+            'slug' => $this->slug,
+            'image' => $request->getSchemeAndHttpHost().'/public/image/'.$this->image
         ];
     }
 }
