@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::guard('sanctum');
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|email|exists:user,email',
             'password' => 'required'
         ];
     }
