@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
+            $table->uuid('reference_id');
             $table->foreignId('user_id')->constrained('users');
             $table->string('status');
             $table->longText('address');
