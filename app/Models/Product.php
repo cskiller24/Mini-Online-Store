@@ -25,8 +25,14 @@ class Product extends Model
         return $this->hasMany(Cart::class, 'product_id');
     }
 
-    public function transaction()
+//    public function transaction()
+//    {
+//        return $this->hasMany(Transaction::class, 'product_id');
+//    }
+
+    public function user()
     {
-        return $this->hasMany(Transaction::class, 'product_id');
+        return $this->belongsToMany(User::class, 'carts', 'product_id', 'user_id')
+            ->withPivot('quantity');
     }
 }

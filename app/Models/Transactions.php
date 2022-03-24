@@ -10,11 +10,14 @@ class Transactions extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
         'status',
         'address',
         'contact_number',
     ];
+
+    protected $primaryKey = 'id';
 
     protected $table = 'transactions';
 
@@ -25,9 +28,14 @@ class Transactions extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function transaction()
-    {
-        return $this->hasMany(Transaction::class, 'transaction_id');
-    }
+//    public function transaction()
+//    {
+//        return $this->hasMany(Transaction::class, 'transaction_id');
+//    }
 
+    public function product()
+    {
+        return $this->belongsToMany(Product::class, 'transaction_details', 'transaction_id', 'product_id')
+            ->withPivot('quantity')->withTimestamps();
+    }
 }
