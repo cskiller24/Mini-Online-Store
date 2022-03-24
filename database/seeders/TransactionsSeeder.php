@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Transaction;
+use App\Models\Product;
 use App\Models\Transactions;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TransactionsSeeder extends Seeder
@@ -16,6 +15,12 @@ class TransactionsSeeder extends Seeder
      */
     public function run()
     {
-        Transactions::factory(100)->create();
+        Transactions::factory(10)->create();
+
+        foreach (Transactions::all() as $transaction) {
+            $product = Product::inRandomOrder()->take(rand(1,10))->pluck('id');
+            $transaction->product()->attach($product, ['quantity' => rand(1,5)]);
+        }
     }
 }
+

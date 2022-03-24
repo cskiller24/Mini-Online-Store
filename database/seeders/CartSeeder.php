@@ -16,7 +16,7 @@ class CartSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::inRandomOrder()->take->(rand(10,20))->get();
+        $users = User::inRandomOrder()->take(rand(1,10))->get();
 
         foreach ($users as $user) {
             $product = Product::inRandomOrder()->take(rand(1,5))->pluck('id');
