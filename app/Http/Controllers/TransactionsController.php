@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Transactions\TransactionResource;
+use App\Models\Cart;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Transactions;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TransactionsController extends Controller
 {
@@ -75,6 +80,73 @@ class TransactionsController extends Controller
         return response()->json([
             'message' => 'Successfully Updated Transaction',
         ]);
+    }
+
+    public function store()
+    {
+        if(auth()->user()->is_admin === 1) {
+            return response()->json([
+                'message' => 'Unauthorized Access (You are an Admin)',
+            ], 401);
+        }
+
+        try {
+            DB::beginTransaction();
+            // Get all the carts of user
+            $carts = Cart::where('user_id', auth()->user()->id)->with('product')->get() ?? null;
+
+            if($carts === [] || $carts === null || $carts->count() <= 0) {
+                throw new \Exception('Cart does not exists');
+            }
+
+            $products = [];
+            $transaction_chunk = [];
+            foreach ($carts as $cart) {
+                // Check if all products has enough quantity for the transaction
+                if(($total =$cart['product']['quantity'] - $cart['quantity']) < 0) {
+                    throw new \Exception('Quantity of a cart is greater than the stock');
+                }
+                $products[$cart['product']['id']] = $total; // Product for mass update
+                $transaction_chunk[$cart['product']['id']] = $cart['quantity'];
+            }
+            // Product mass update
+            foreach ($products as $key => $value) {
+                Product::where('id', $key)->update(['quantity' => $value]);
+            }
+            $transaction = Transactions::create([
+                'reference_id' => Str::uuid(),
+                'user_id' => auth()->user()->id,
+                'status' => self::PENDING_STATUS,
+                'address' => auth()->user()->address,
+                'contact_number' => auth()->user()->contact_number
+            ]);
+            // Mass insertion to transactions
+            foreach ($transaction_chunk as $key => $value) {
+                $transaction->product()->attach($key, ['quantity' => $value]);
+            }
+            Cart::where('user_id', auth()->user()->id)->delete();
+            // Mass Deletion to carts
+            DB::commit();
+            return response()->json([
+                'message' => 'Successfully added Transaction',
+                'data' => [
+                    'transaction' => $transaction
+                ]
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Something went wrong please try again',
+                'error' => [
+                    'query' => $e->getMessage()
+                ]
+            ], 422);
+        }
+    }
+
+    public function checkQuantity(int $productQuantity, int $transactionQuantity): bool
+    {
+        return ($productQuantity - $transactionQuantity) < 0;
     }
 
     public function authorizeStatus(int $status): bool

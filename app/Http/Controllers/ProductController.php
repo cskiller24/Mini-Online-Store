@@ -148,7 +148,7 @@ class ProductController extends Controller
         $product->save();
 
         return response()->json([
-            'product' => ProductResource::collection($product->refresh())
+            'product' => ProductResource::make($product->refresh())
         ], 200);
     }
 }

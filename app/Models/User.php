@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use HasFactory, HasApiTokens;
 
+    protected $guarded = ['is_admin'];
+
     protected $fillable = [
         'name',
         'email',
