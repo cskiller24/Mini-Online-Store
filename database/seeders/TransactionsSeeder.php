@@ -15,10 +15,10 @@ class TransactionsSeeder extends Seeder
      */
     public function run()
     {
-        Transactions::factory(10)->create();
-
+        $transactions = Transactions::factory(400)->make();
+        Transactions::insert($transactions->toArray());
         foreach (Transactions::all() as $transaction) {
-            $product = Product::inRandomOrder()->take(rand(1,10))->pluck('id');
+            $product = Product::inRandomOrder()->take(rand(1, 15))->pluck('id');
             $transaction->product()->attach($product, ['quantity' => rand(1,5)]);
         }
     }
