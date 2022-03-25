@@ -18,8 +18,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = ProductResource::collection(Product::paginate(10));
-        return response()->json(['products' => $products]);
+        $products = ProductResource::collection(Product::paginate(25));
+        return response()->json([
+            'message' => 'Successfully retrieve data',
+            'data' => [
+                'products' => $products
+            ]
+        ]);
     }
 
     /**
@@ -37,7 +42,7 @@ class ProductController extends Controller
         $imageName =  uniqid() . '-' .$file->getClientOriginalName();
         $file->storeAs('public/image', $imageName);
 
-        Product::create([
+        $product = Product::create([
             'name' => $credentials['name'],
             'quantity' => $credentials['quantity'],
             'price' => $credentials['price'],
@@ -45,7 +50,12 @@ class ProductController extends Controller
             'image' => $imageName
         ]);
 
-        return response()->json(1, 201);
+        return response()->json([
+            'message' => 'Successfully added product to database',
+            'data' => [
+                'product' => ProductResource::make($product)
+            ]
+        ], 201);
     }
 
     /**
@@ -56,17 +66,25 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where(['id' => $id])->first()->get();
+        $product = Product::where('id', $id)->first();
 
-        if(! $product) {
+        if(! $product || $product->count() <= 0) {
             return response()->json([
-                'errors' => ['message' => 'Product does not Exist']
-            ], 400);
+                'message' => 'Product does not exists',
+                'errors' => [
+                    'product' => 'Product does not exists'
+                ]
+            ], 404);
         }
 
-        $product = ProductResource::collection($product);
+        $product = ProductResource::make($product);
 
-        return response()->json(['product' => $product]);
+        return response()->json([
+            'message' => 'Successfully retrieve data',
+            'data' => [
+                'product' => $product
+            ]
+        ]);
     }
 
     /**
@@ -79,34 +97,44 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric|gt:0',
-            'image' => 'required|image|mimes:jpg,png,jpeg,svg',
+            'name' => 'sometimes',
+            'price' => 'numeric|gt:0',
+            'image' => 'image|mimes:jpg,png,jpeg,svg',
         ]);
 
         $file = $request->file('image');
-
         $product = Product::where(['id' => $id])->first();
 
         if(! $product) {
             return response()->json([
-                'errors' => ['message' => 'Product does not Exist']
-            ], 400);
+                'message' => 'Product does not exists',
+                'errors' => [
+                    'product' => 'Product does not exists'
+                ]
+            ], 404);
         }
 
         if($product->image !== self::NOT_AVAILABLE_IMAGE) {
             Storage::disk('public')->delete('image/'. $product->image);
         }
 
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->image = uniqid().'-'.$file->getClientOriginalName();
+        if($request->has('name') && $request->name !== null) {
+            $product->name = $request->name;
+        }
+        if($request->has('price') && $request->price !== null) {
+            $product->price = $request->price;
+        }
+        if($request->has('image') && $request->file('image') !== null) {
+            $product->image = uniqid().'-'.$file->getClientOriginalName();
+        }
         $product->save();
-
         $file->storeAs('public/image', $product->image);
 
         return response()->json([
-            'product' => ProductResource::collection($product->get())
+            'message' => 'Successfully update product',
+            'data' => [
+                'product' => ProductResource::make($product)
+            ],
         ], 200);
     }
 
@@ -120,10 +148,13 @@ class ProductController extends Controller
     {
         $product = Product::where(['id' => $id])->first();
 
-        if(! $product) {
+        if(! $product && $product->count() <= 0) {
             return response()->json([
-                'error' => ['message' => 'Product does not exist']
-            ], 400);
+                'message' => 'Product does not exist',
+                'error' => [
+                    'product' => 'Product does not exist'
+                ]
+            ], 404);
         }
 
         if($product->image !== self::NOT_AVAILABLE_IMAGE) {
@@ -134,7 +165,10 @@ class ProductController extends Controller
         $product->save();
         $product->delete();
 
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Successfully deleted product',
+            'data' => null,
+        ], 204);
     }
 
     public function restock(Request $request, $id)
@@ -148,7 +182,10 @@ class ProductController extends Controller
         $product->save();
 
         return response()->json([
-            'product' => ProductResource::make($product->refresh())
+            'message' => 'Successfully restocked product',
+            'data' => [
+                'product' => ProductResource::make($product->refresh())
+            ]
         ], 200);
     }
 }

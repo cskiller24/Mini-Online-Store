@@ -21,9 +21,20 @@ class TransactionsController extends Controller
 
     public function index()
     {
-        $transactions = Transactions::with(['product', 'user'])->paginate(10);
+        $transactions = Transactions::with(['product', 'user'])->paginate(25);
+        if($transactions->count() <= 0) {
+            return response()->json([
+                'message' => 'No transactions retrieved',
+                'data' => [
+                    'transactions' => [],
+                ],
+            ], 204);
+        }
         return response()->json([
-            'transactions' => TransactionResource::collection($transactions)
+            'message' => 'Successfully retrieve data',
+            'data' => [
+                'transactions' => TransactionResource::collection($transactions)
+            ]
         ]);
     }
 
@@ -32,7 +43,10 @@ class TransactionsController extends Controller
         $transactions = Transactions::where('user_id', auth()->user()->id)
             ->with('product')->get();
         return response()->json([
-            'transactions' => TransactionResource::collection($transactions)
+            'message' => 'Successfully retrieve data',
+            'data' => [
+                'transactions' => TransactionResource::collection($transactions)
+            ]
         ]);
     }
 
@@ -40,7 +54,7 @@ class TransactionsController extends Controller
     {
         $request->validate([
             'reference_id' => 'required|exists:transactions,reference_id',
-            'status' => 'required'
+            'status' => 'required|numeric'
         ]);
 
         if(
@@ -56,13 +70,13 @@ class TransactionsController extends Controller
                 'errors' => [
                     'status' => 'Must be int (0, 1, 2, 3)'
                 ]
-            ]);
+            ], 401);
         }
 
         if(!$this->authorizeStatus($request->status)) {
             return response()->json([
                 'message' => 'You are trying to access unauthorized action'
-            ], 422);
+            ], 401);
         }
         try {
             $transaction = Transactions::where('reference_id', $request->reference_id)->first();
@@ -138,7 +152,7 @@ class TransactionsController extends Controller
             return response()->json([
                 'message' => 'Something went wrong please try again',
                 'error' => [
-                    'query' => $e->getMessage()
+                    'transaction' => $e->getMessage()
                 ]
             ], 422);
         }

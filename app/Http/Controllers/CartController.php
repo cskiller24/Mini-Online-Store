@@ -16,7 +16,10 @@ class CartController extends Controller
         $carts = Cart::where('user_id', auth()->user()->id)->with('product')->get();
 
         return response()->json([
-            'carts' => CartResource::collection($carts),
+            'message' => 'Successfully retrieve data',
+            'data' => [
+                'carts' => CartResource::collection($carts),
+            ]
         ]);
     }
 
