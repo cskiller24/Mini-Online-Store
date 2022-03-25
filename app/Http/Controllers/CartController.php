@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Carts\CartResource;
-use App\Http\Resources\Carts\CartUserResource;
+use App\Models\Cart;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,10 +13,10 @@ class CartController extends Controller
     //Show all carts (Specific)
     public function index()
     {
-        $user = User::where('id', auth()->user()->id)->with('cart')->get();
+        $carts = Cart::where('user_id', auth()->user()->id)->with('product')->get();
 
         return response()->json([
-            'user' => CartUserResource::collection($user),
+            'carts' => CartResource::collection($carts),
         ]);
     }
 
