@@ -144,11 +144,6 @@ class TransactionsController extends Controller
         }
     }
 
-    public function checkQuantity(int $productQuantity, int $transactionQuantity): bool
-    {
-        return ($productQuantity - $transactionQuantity) < 0;
-    }
-
     public function authorizeStatus(int $status): bool
     {
         if ($status !== self::CANCELLED_STATUS && auth()->user()->is_admin === 0) {
