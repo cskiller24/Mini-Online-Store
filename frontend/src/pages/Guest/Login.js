@@ -12,12 +12,20 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme();
 
 const Login = () => {
-  const handleSubmit = () => {
-    console.log("Handling");
+  const { login } = useAuth();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const user = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+    login(user);
   };
 
   return (
@@ -32,7 +40,7 @@ const Login = () => {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }} />
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
@@ -76,7 +84,7 @@ const Login = () => {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link variant="body2" component="h2">
                   <RouterLink to="/register">
                     {"Don't have an account? Sign Up"}
                   </RouterLink>
