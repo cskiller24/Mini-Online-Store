@@ -25,7 +25,10 @@ class AuthController extends Controller
         $user = User::where(['email' => $credentials['email']])->first();
         $token = $user->createToken(time())->plainTextToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 200);
     }
 
     public function register(RegisterRequest $request)
