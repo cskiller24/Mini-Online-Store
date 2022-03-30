@@ -1,20 +1,9 @@
-import React, { useContext } from "react";
-import AuthContext from "../contexts/AuthContext";
-import UserContext, { UserProvider } from "../contexts/UserContext";
+import React from "react";
+import useAuth from "../hooks/useAuth";
 
 const Context = () => {
-  const { user, setUser } = useContext(AuthContext);
-  const { test } = useContext(UserContext);
-  const userSet = (name) => {
-    setUser(name);
-  };
-  return (
-    <UserProvider>
-      <input type="text" onChange={(e) => setUser(e.target.value)}></input>
-      {user}
-      {test}
-    </UserProvider>
-  );
+  const { user, token } = useAuth();
+  return <div>{token && user ? "true" : "false"}</div>;
 };
 
 export default Context;

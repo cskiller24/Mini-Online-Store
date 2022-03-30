@@ -4,14 +4,13 @@ import useAuth from "../hooks/useAuth";
 
 const UserGuard = () => {
   const location = useLocation();
-  const { getUser } = useAuth();
-  const user = getUser;
+  const { user, token } = useAuth();
   return (
     <>
-      {user?.is_admin === false ? (
+      {!user.is_admin && token ? (
         <Outlet />
       ) : (
-        <Navigate to="/login" state={{ from: location }} replace />
+        <Navigate to="/admin" state={{ from: location }} replace />
       )}
     </>
   );

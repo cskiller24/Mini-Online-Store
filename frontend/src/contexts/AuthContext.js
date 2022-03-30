@@ -1,5 +1,7 @@
-import { createContext, useReducer, useState } from "react";
-import { authReducer, authActions } from "../reducer/authReducer";
+import { createContext, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { apiLogin, apiRegister, apiLogout } from "../api/guest/guestApi";
+import { token as API_TOKEN } from "../utils/constants";
 
 const AuthContext = createContext();
 
@@ -13,17 +15,30 @@ const AuthContext = createContext();
 // };
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, {
-    user: null,
-    token: null,
-  });
+  const location = useLocation();
+
+  const [user, setUser] = useState("test");
+
+  const [token, setToken] = useState("test");
+
+  const [error, setError] = useState("");
 
   const login = (user) => {
     const data = {
       email: user.email,
       password: user.password,
     };
-    dispatch({ type: authActions.LOGIN, payload: data });
+
+    const response = apiLogin(data);
+    if (response.status === false) {
+      setError(response.data);
+    }
+    if (response.status === true) {
+      setUser(response.data.user);
+      setToken(response.data.token);
+      localStorage.setItem(API_TOKEN, response.data.token);
+      <Navigate to="/" state={{ from: location }} replace />;
+    }
   };
 
   const register = (user) => {
@@ -35,15 +50,24 @@ export const AuthProvider = ({ children }) => {
       address: user.address,
       contact_number: user.contact_number,
     };
-    dispatch({ type: authActions.REGISTER, payload: data });
+
+    const response = apiRegister(data);
+
+    if (response.status === false) {
+      setError(response.data);
+    }
+    if (response.status === true) {
+      <Navigate to="/login" state={{ from: location }} replace />;
+    }
   };
 
   const logout = () => {
-    dispatch({ type: authActions.LOGOUT });
+    apiLogout();
   };
-
   return (
-    <AuthContext.Provider value={{ login, register, logout, state }}>
+    <AuthContext.Provider
+      value={{ token, user, error, login, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

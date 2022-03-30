@@ -9,6 +9,7 @@ import Admin from "./pages/Admin";
 import Guest from "./utils/Guest";
 import Login from "./pages/Guest/Login";
 import Register from "./pages/Guest/Register";
+import Context from "./pages/Context";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="" element={<Admin />} />
           </Route>
         </Route>
+        <Route path="/debug" element={<Context />} />
       </Routes>
     </AuthProvider>
   );
