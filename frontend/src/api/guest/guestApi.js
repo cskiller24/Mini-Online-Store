@@ -5,21 +5,26 @@ export const apiLogin = async (user) => {
   await axios
     .post(guest.LOGIN, user)
     .then((res) => {
-      status_helper(true, res.data.user, res.response.status);
+      console.log(res.data); //status_helper(true, res.data.user, res.response.status);
     })
     .catch((res) => {
-      status_helper(false, res.data.error, res.response.status);
+      console.log(res.response.data); //status_helper(false, res.data.error, res.response.status);
     });
 };
 
 export const apiRegister = async (user) => {
-  await axios
+  return await axios
     .post(guest.REGISTER, user)
     .then((res) => {
-      status_helper(true, res.data, res.response.status);
+      console.log(res.data); //status_helper(true, res.data, res.response.status);
     })
     .catch((res) => {
-      status_helper(true, res.data.error, res.response.status);
+      return status_helper(false, res.response.data, res.response.status);
+      // return {
+      //   status: false,
+      //   data: res.response.data ?? [],
+      //   status_code: res.response.code ?? 500,
+      // };
     });
 };
 
@@ -27,10 +32,10 @@ export const apiLogout = async () => {
   await axios
     .post(guest.LOGOUT)
     .then((res) => {
-      status_helper(true, res.data.error, res.response.status);
+      console.log(res.data); //status_helper(true, res.data.error, res.response.status);
     })
     .catch((res) => {
-      status_helper(false, res.data.error, res.response.status);
+      console.log(res.data); //status_helper(false, res.data.error, res.response.status);
     });
 };
 

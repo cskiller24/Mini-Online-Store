@@ -17,11 +17,11 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const location = useLocation();
 
-  const [user, setUser] = useState("test");
+  const [user, setUser] = useState(null);
 
-  const [token, setToken] = useState("test");
+  const [token, setToken] = useState(localStorage.getItem(API_TOKEN));
 
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState(null);
 
   const login = (user) => {
     const data = {
@@ -31,7 +31,8 @@ export const AuthProvider = ({ children }) => {
 
     const response = apiLogin(data);
     if (response.status === false) {
-      setError(response.data);
+      setMessage(response.data);
+      return { status: response.status, data: response.data };
     }
     if (response.status === true) {
       setUser(response.data.user);
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = (user) => {
+  const register = async (user) => {
     const data = {
       name: user.name,
       email: user.email,
@@ -51,12 +52,13 @@ export const AuthProvider = ({ children }) => {
       contact_number: user.contact_number,
     };
 
-    const response = apiRegister(data);
+    const response = await apiRegister(data);
 
-    if (response.status === false) {
-      setError(response.data);
+    if (response?.status === false) {
+      setMessage(response.data);
+      return response;
     }
-    if (response.status === true) {
+    if (response?.status === true) {
       <Navigate to="/login" state={{ from: location }} replace />;
     }
   };
@@ -64,9 +66,10 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     apiLogout();
   };
+
   return (
     <AuthContext.Provider
-      value={{ token, user, error, login, register, logout }}
+      value={{ token, user, message, setMessage, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>
