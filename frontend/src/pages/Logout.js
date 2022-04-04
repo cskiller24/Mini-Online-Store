@@ -22,6 +22,7 @@ const Logout = () => {
     return () => {
       setLoading(true);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   return (

@@ -1,10 +1,5 @@
 import { createContext, useState } from "react";
-import {
-  apiLogin,
-  apiRegister,
-  apiLogout,
-  myNewTest,
-} from "../api/guest/guestApi";
+import { apiLogin, apiRegister, apiLogout } from "../api/guest/guestApi";
 import { TOKEN as API_TOKEN, USER } from "../utils/constants";
 
 const AuthContext = createContext();
