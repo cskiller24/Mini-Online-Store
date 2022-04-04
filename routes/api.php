@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +50,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         });
         Route::get('/transactions', [TransactionsController::class, 'index']);
     });
+    Route::post('/test', [UserController::class, 'test']);
+    Route::get('/test', [UserController::class, 'test']);
     Route::put('/transaction/update', [TransactionsController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
