@@ -1,7 +1,11 @@
 import { createContext, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { apiLogin, apiRegister, apiLogout } from "../api/guest/guestApi";
-import { token as API_TOKEN } from "../utils/constants";
+import {
+  apiLogin,
+  apiRegister,
+  apiLogout,
+  myNewTest,
+} from "../api/guest/guestApi";
+import { TOKEN as API_TOKEN, USER } from "../utils/constants";
 
 const AuthContext = createContext();
 
@@ -15,31 +19,22 @@ const AuthContext = createContext();
 // };
 
 export const AuthProvider = ({ children }) => {
-  const location = useLocation();
+  const [user, setUser] = useState(() =>
+    localStorage.getItem(USER) !== "undefined"
+      ? JSON.parse(localStorage.getItem(USER))
+      : null
+  );
+  const [token, setToken] = useState(localStorage.getItem(API_TOKEN) ?? null);
 
-  const [user, setUser] = useState(null);
-
-  const [token, setToken] = useState(localStorage.getItem(API_TOKEN));
-
-  const [message, setMessage] = useState(null);
-
-  const login = (user) => {
-    const data = {
-      email: user.email,
-      password: user.password,
-    };
-
-    const response = apiLogin(data);
-    if (response.status === false) {
-      setMessage(response.data);
-      return { status: response.status, data: response.data };
-    }
+  const login = async (data) => {
+    const response = await apiLogin(data);
     if (response.status === true) {
-      setUser(response.data.user);
-      setToken(response.data.token);
+      setToken(response?.data.token);
+      setUser(response?.data.user);
+      localStorage.setItem(USER, JSON.stringify(response.data.user));
       localStorage.setItem(API_TOKEN, response.data.token);
-      <Navigate to="/" state={{ from: location }} replace />;
     }
+    return response;
   };
 
   const register = async (user) => {
@@ -51,26 +46,23 @@ export const AuthProvider = ({ children }) => {
       address: user.address,
       contact_number: user.contact_number,
     };
-
     const response = await apiRegister(data);
-
-    if (response?.status === false) {
-      setMessage(response.data);
-      return response;
-    }
-    if (response?.status === true) {
-      <Navigate to="/login" state={{ from: location }} replace />;
-    }
+    return response;
   };
 
-  const logout = () => {
-    apiLogout();
+  const logout = async () => {
+    const response = await apiLogout();
+    if (response.status === true) {
+      localStorage.removeItem(USER);
+      localStorage.removeItem(API_TOKEN);
+      setUser(null);
+      setToken(null);
+    }
+    return response;
   };
 
   return (
-    <AuthContext.Provider
-      value={{ token, user, message, setMessage, login, register, logout }}
-    >
+    <AuthContext.Provider value={{ token, user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

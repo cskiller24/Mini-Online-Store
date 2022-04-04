@@ -1,4 +1,5 @@
-export const token = "API_TOKEN";
+export const TOKEN = "API_TOKEN";
+export const USER = "USER";
 
 export const guest = {
   LOGIN: "/login",

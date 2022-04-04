@@ -1,41 +1,47 @@
-import axios from "../axios";
-import { guest } from "../../utils/constants";
+import axiosClient from "../axios";
+import { guest, TOKEN } from "../../utils/constants";
 
 export const apiLogin = async (user) => {
-  await axios
+  return await axiosClient
     .post(guest.LOGIN, user)
-    .then((res) => {
-      console.log(res.data); //status_helper(true, res.data.user, res.response.status);
+    .then(({ data, status }) => {
+      return status_helper(true, data, status);
     })
     .catch((res) => {
-      console.log(res.response.data); //status_helper(false, res.data.error, res.response.status);
+      return status_helper(false, res.response.data, res.response.status);
     });
 };
 
 export const apiRegister = async (user) => {
-  return await axios
+  return await axiosClient
     .post(guest.REGISTER, user)
     .then((res) => {
-      console.log(res.data); //status_helper(true, res.data, res.response.status);
+      return status_helper(true, res.data, res.status);
     })
     .catch((res) => {
       return status_helper(false, res.response.data, res.response.status);
-      // return {
-      //   status: false,
-      //   data: res.response.data ?? [],
-      //   status_code: res.response.code ?? 500,
-      // };
     });
 };
 
 export const apiLogout = async () => {
-  await axios
-    .post(guest.LOGOUT)
+  const token = localStorage.getItem(TOKEN);
+  return await axiosClient
+    .post(
+      guest.LOGOUT,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
     .then((res) => {
-      console.log(res.data); //status_helper(true, res.data.error, res.response.status);
+      return status_helper(true, res.data, res.status);
     })
     .catch((res) => {
-      console.log(res.data); //status_helper(false, res.data.error, res.response.status);
+      return status_helper(false, res.response?.data, res.response?.status);
     });
 };
 
