@@ -9,7 +9,7 @@ import Admin from "./pages/Admin";
 import Guest from "./utils/Guest";
 import Login from "./pages/Guest/Login";
 import Register from "./pages/Guest/Register";
-import Context from "./pages/Context";
+import Logout from "./pages/Logout";
 
 const App = () => {
   return (
@@ -26,8 +26,8 @@ const App = () => {
           <Route path="/admin" element={<AdminGuard />}>
             <Route path="" element={<Admin />} />
           </Route>
+          <Route path="/logout" element={<Logout />} />
         </Route>
-        <Route path="/debug" element={<Context />} />
       </Routes>
     </AuthProvider>
   );
