@@ -41,7 +41,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::group(['middleware' => ['admin']], function () {
         Route::controller(ProductController::class)->group(function () {
-            Route::get('/products', 'index');
             Route::post('/product/create', 'store');
             Route::get('/product/{id}', 'show');
             Route::post('/product/update/{id}', 'update');
@@ -50,7 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         });
         Route::get('/transactions', [TransactionsController::class, 'index']);
     });
-    Route::post('/test', [UserController::class, 'test']);
+    Route::get('/products', [ProductController::class, 'index']);
     Route::get('/test', [UserController::class, 'test']);
     Route::put('/transaction/update', [TransactionsController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
