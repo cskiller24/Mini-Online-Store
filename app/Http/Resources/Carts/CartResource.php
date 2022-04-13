@@ -17,7 +17,7 @@ class CartResource extends JsonResource
         return [
             'id' => $this->product_id,
             'name' => $this->product->name,
-            'image' => $request->getSchemeAndHttpHost().'/public/images/'.$this->product->image,
+            'image' => asset('/storage/image/'.$this->product->image),//$request->getSchemeAndHttpHost().'/public/image/'.$this->product->image,
             'price' => $this->product->price,
             'slug' => $this->product->slug,
             'quantity' => $this->quantity

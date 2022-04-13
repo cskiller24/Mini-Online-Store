@@ -21,9 +21,7 @@ class ProductResource extends JsonResource
             'quantity' => $this->quantity,
             'price' => $this->price,
             'slug' => $this->slug,
-            'image' => $request->getSchemeAndHttpHost().'/public/images/'.$this->image,
-            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y_h:m:s'),
-            'updated_at' => Carbon::parse($this->updated_at)->format('d/m/Y_h:m:s'),
+            'image' => asset('/storage/image/'.$this->image)//$request->getSchemeAndHttpHost().'/storage/image/'.$this->image,
         ];
     }
 }
