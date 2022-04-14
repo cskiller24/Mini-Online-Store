@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {
@@ -19,7 +19,7 @@ export const StoreProvider = ({ children }) => {
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [carts, setCarts] = useState([]);
-  const [transaction, setTransaction] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   // Validators before function calls
   const adminValidator = (user) => {
@@ -76,6 +76,61 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
+  const decrease_cart = async (id, product) => {
+    if (!userValidator) {
+      return console.log("401 Forbidden");
+    }
+    await axiosPrivate
+      .put(CART_DECREASE, { product_id: id })
+      .then(({ status, data }) => {
+        console.log(data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    if (carts.length > 0) {
+      decrease_cart_noload(product);
+    }
+  };
+
+  const fetch_transaction = async () => {
+    if (!userValidator) {
+      return console.log("401 Forbidden");
+    }
+    await axiosPrivate
+      .get(TRANSACTION)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          setTransactions(data.data.transactions);
+        }
+        console.log(data);
+      })
+      .catch((res) => console.log(res));
+  };
+
+  const create_transaction = async (data) => {
+    await axiosPrivate
+      .post(TRANSACTION_CREATE, data)
+      .then(({ status, data }) => {
+        console.log(data);
+      })
+      .catch((res) => {
+        console.error(res);
+      });
+  };
+
+  const update_transaction = async (data) => {
+    await axiosPrivate
+      .put(TRANSACTIION_UPDATE, data)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          update_transaction_noload(data.data.transaction);
+        }
+        console.log(data);
+      })
+      .catch((res) => console.error(res));
+  };
+
   const insert_cart_noload = (product) => {
     const cart = carts.find((cart) => product.name === cart.name);
     if (cart) {
@@ -96,29 +151,21 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
-  const decrease_cart = async (id, product) => {
-    if (!userValidator) {
-      return console.log("401 Forbidden");
-    }
-    await axiosPrivate
-      .put(CART_DECREASE, { product_id: id })
-      .then(({ status, data }) => {
-        console.log(data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    if (carts.length > 0) {
-      decrease_cart_noload(product);
-    }
-  };
-
   const decrease_cart_noload = (product) => {
     let newCart = carts.map((cart) =>
       cart.id === product.id ? { ...cart, quantity: cart.quantity - 1 } : cart
     );
     newCart = newCart.filter((cart) => cart.quantity > 0);
     setCarts(newCart);
+  };
+
+  const update_transaction_noload = ({ reference_id, status }) => {
+    let newTransaction = transactions.map((transaction) =>
+      transaction.reference_id === reference_id
+        ? { ...transaction, status: status }
+        : transaction
+    );
+    setTransactions(newTransaction);
   };
 
   const api_test = async () => {
@@ -128,6 +175,7 @@ export const StoreProvider = ({ children }) => {
   return (
     <StoreContext.Provider
       value={{
+        user,
         fetch_products,
         products,
         api_test,
@@ -135,6 +183,10 @@ export const StoreProvider = ({ children }) => {
         carts,
         insert_cart,
         decrease_cart,
+        transactions,
+        fetch_transaction,
+        create_transaction,
+        update_transaction,
       }}
     >
       {children}

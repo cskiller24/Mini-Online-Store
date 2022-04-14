@@ -12,6 +12,8 @@ import Logout from "./pages/Logout";
 import { StoreProvider } from "./contexts/StoreContext";
 import UserHome from "./pages/User/UserHome";
 import UserCarts from "./pages/User/UserCarts";
+import UserCheckout from "./pages/User/UserCheckout";
+import UserTransactions from "./pages/User/UserTransactions";
 
 const App = () => {
   return (
@@ -26,6 +28,8 @@ const App = () => {
             <Route path="/" element={<UserGuard />}>
               <Route path="" element={<UserHome />} />
               <Route path="/carts" element={<UserCarts />} />
+              <Route path="/checkout" element={<UserCheckout />} />
+              <Route path="/transactions" element={<UserTransactions />} />
             </Route>
             <Route path="/admin" element={<AdminGuard />}>
               <Route path="" element={<Admin />} />

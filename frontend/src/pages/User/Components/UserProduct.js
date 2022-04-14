@@ -9,7 +9,7 @@ const UserProduct = ({ product, setIsCartAlertOpen }) => {
   const { insert_cart } = useStore();
   const addToCart = async (id, product) => {
     await insert_cart(id, product);
-    setIsCartAlertOpen(true);
+    setIsCartAlertOpen({ state: true, message: "Successfully Added to Carts" });
   };
   return (
     <Paper

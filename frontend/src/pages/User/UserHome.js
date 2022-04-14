@@ -4,11 +4,16 @@ import React, { useEffect, useState } from "react";
 import useStore from "../../hooks/useStore";
 import Loading from "../../utils/components/Loading";
 import UserProduct from "./Components/UserProduct";
+import { useLocation } from "react-router-dom";
 
 const UserHome = () => {
+  const { state } = useLocation();
   const { products, fetch_products } = useStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [isCartAlertOpen, setIsCartAlertOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState({
+    state: false,
+    message: "Successfully Added to Cart",
+  });
   useEffect(() => {
     const index = async () => {
       if (products.length <= 0) {
@@ -19,13 +24,23 @@ const UserHome = () => {
     index();
   }, []);
 
+  useEffect(() => {
+    if (state?.message) {
+      setIsAlertOpen({
+        state: true,
+        message: state.message,
+      });
+      state.message = "";
+    }
+  }, [state]);
+
   if (isLoading) {
     return <Loading />;
   }
 
   return (
     <>
-      <Collapse in={isCartAlertOpen}>
+      <Collapse in={isAlertOpen.state}>
         <Alert
           action={
             <IconButton
@@ -33,7 +48,10 @@ const UserHome = () => {
               color="inherit"
               size="small"
               onClick={() => {
-                setIsCartAlertOpen(false);
+                setIsAlertOpen({
+                  state: false,
+                  message: "",
+                });
               }}
             >
               <CloseIcon fontSize="inherit" />
@@ -41,7 +59,7 @@ const UserHome = () => {
           }
           sx={{ mt: 2 }}
         >
-          Successfully Added to Carts
+          {isAlertOpen.message}
         </Alert>
       </Collapse>
       <Box
@@ -55,7 +73,7 @@ const UserHome = () => {
           <UserProduct
             key={product.id}
             product={product}
-            setIsCartAlertOpen={setIsCartAlertOpen}
+            setIsCartAlertOpen={setIsAlertOpen}
           />
         ))}
       </Box>

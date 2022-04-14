@@ -93,10 +93,16 @@ class TransactionsController extends Controller
 
         return response()->json([
             'message' => 'Successfully Updated Transaction',
+            'data' => [
+                'transaction' => [
+                    'reference_id' => $request->reference_id,
+                    'status' => $request->status,
+                ]
+            ]
         ]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
         if(auth()->user()->is_admin === 1) {
             return response()->json([
@@ -131,8 +137,8 @@ class TransactionsController extends Controller
                 'reference_id' => Str::uuid(),
                 'user_id' => auth()->user()->id,
                 'status' => self::PENDING_STATUS,
-                'address' => auth()->user()->address,
-                'contact_number' => auth()->user()->contact_number
+                'address' => $request->address,
+                'contact_number' => $request->contact_number
             ]);
             // Mass insertion to transactions
             foreach ($transaction_chunk as $key => $value) {
