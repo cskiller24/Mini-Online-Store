@@ -36,6 +36,6 @@ class Transactions extends Model
     public function product()
     {
         return $this->belongsToMany(Product::class, 'transaction_details', 'transaction_id', 'product_id')
-            ->withPivot('quantity')->withTimestamps();
+            ->withPivot('quantity')->withTimestamps()->withTrashed();
     }
 }

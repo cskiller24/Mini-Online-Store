@@ -5,13 +5,20 @@ import {
   products as API_PRODUCTS,
   carts as API_CARTS,
   transactions as API_TRANSACTIONS,
+  ADMIN_INDEX,
 } from "../utils/constants";
 
 const StoreContext = createContext();
 
 export const StoreProvider = ({ children }) => {
-  const { PRODUCTS, PRODUCT, PRODUCT_CREATE, PRODUCT_UPDATE, PRODUCT_DELETE } =
-    API_PRODUCTS;
+  const {
+    PRODUCTS,
+    PRODUCT,
+    PRODUCT_CREATE,
+    PRODUCT_UPDATE,
+    PRODUCT_DELETE,
+    PRODUCT_RESTOCK,
+  } = API_PRODUCTS;
   const { CARTS, CART_ADD, CART_DECREASE } = API_CARTS;
   const { TRANSACTIONS, TRANSACTION, TRANSACTION_CREATE, TRANSACTIION_UPDATE } =
     API_TRANSACTIONS;
@@ -20,6 +27,7 @@ export const StoreProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [carts, setCarts] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [adminData, setAdminData] = useState(null);
 
   // Validators before function calls
   const adminValidator = (user) => {
@@ -93,6 +101,7 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
+  //User
   const fetch_transaction = async () => {
     if (!userValidator) {
       return console.log("401 Forbidden");
@@ -108,11 +117,31 @@ export const StoreProvider = ({ children }) => {
       .catch((res) => console.log(res));
   };
 
+  //Admin
+  const fetch_transactions = async () => {
+    if (!adminValidator) {
+      return "401 Forbidden";
+    }
+
+    await axiosPrivate
+      .get(TRANSACTIONS)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          setTransactions(data.data.transactions);
+        }
+        console.log(data);
+      })
+      .catch((res) => console.error(res));
+  };
+
   const create_transaction = async (data) => {
     await axiosPrivate
       .post(TRANSACTION_CREATE, data)
       .then(({ status, data }) => {
         console.log(data);
+        if (status === 200) {
+          setCarts([]);
+        }
       })
       .catch((res) => {
         console.error(res);
@@ -129,6 +158,110 @@ export const StoreProvider = ({ children }) => {
         console.log(data);
       })
       .catch((res) => console.error(res));
+  };
+
+  const insert_product = async (data) => {
+    if (!adminValidator) {
+      return console.log("401 Forbidden");
+    }
+    await axiosPrivate
+      .post(PRODUCT_CREATE, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(({ status, data }) => {
+        if (status === 201) {
+          insert_product_noload(data.data.product);
+        }
+        console.log(data.data.product);
+      })
+      .catch((res) => console.error(res));
+  };
+
+  const update_product = async (data, id) => {
+    await axiosPrivate
+      .post(PRODUCT_UPDATE + id, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(({ status, data }) => {
+        if (status === 200) {
+          update_product_noload(data.data.product);
+        }
+        console.log(data);
+      })
+      .catch((res) => {
+        console.error(res);
+      });
+  };
+
+  const delete_product = async (id) => {
+    await axiosPrivate
+      .delete(PRODUCT_DELETE + id)
+      .then(({ status }) => {
+        if (status === 204) {
+          delete_product_noload(id);
+        }
+        console.log(status);
+      })
+      .catch((res) => console.error(res));
+  };
+
+  const restock_product = async (id, quantity) => {
+    await axiosPrivate
+      .put(PRODUCT_RESTOCK + id, { quantity: quantity })
+      .then(({ status, data }) => {
+        if (status === 200) {
+          update_product_noload(data.data.product);
+        }
+        console.log(data);
+      })
+      .catch((res) => console.log(res));
+  };
+
+  const fetch_admin = async () => {
+    if (!adminValidator) {
+      return console.log("401 Forbidden");
+    }
+    await axiosPrivate
+      .get(ADMIN_INDEX)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          setAdminData(data.data);
+        }
+        console.log(data);
+      })
+      .catch((res) => console.error(res));
+  };
+
+  const reset_store = () => {
+    setAdminData(null);
+    setCarts([]);
+    setProducts([]);
+    setTransactions([]);
+  };
+
+  const insert_product_noload = (product) => {
+    setProducts([...products, product]);
+  };
+
+  const update_product_noload = (newProduct) => {
+    let newProducts = products.map((product) =>
+      product.id === newProduct.id
+        ? {
+            ...product,
+            name: newProduct.name,
+            quantity: newProduct.quantity,
+            slug: newProduct.slug,
+            image: newProduct.image,
+            price: newProduct.price,
+          }
+        : product
+    );
+    setProducts(newProducts);
+  };
+
+  const delete_product_noload = (id) => {
+    let newProduct = products.filter((product) => product.id !== id);
+    setProducts(newProduct);
   };
 
   const insert_cart_noload = (product) => {
@@ -187,6 +320,14 @@ export const StoreProvider = ({ children }) => {
         fetch_transaction,
         create_transaction,
         update_transaction,
+        fetch_admin,
+        adminData,
+        insert_product,
+        update_product,
+        delete_product,
+        restock_product,
+        reset_store,
+        fetch_transactions,
       }}
     >
       {children}

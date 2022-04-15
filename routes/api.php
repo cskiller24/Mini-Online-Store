@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
@@ -47,10 +48,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('/product/delete/{id}', 'destroy');
             Route::put('/product/restock/{id}', 'restock');
         });
+        Route::get('/admin', [AdminController::class, 'index']);
         Route::get('/transactions', [TransactionsController::class, 'index']);
     });
     Route::get('/products', [ProductController::class, 'index']);
-    Route::get('/test', [UserController::class, 'test']);
     Route::put('/transaction/update', [TransactionsController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+

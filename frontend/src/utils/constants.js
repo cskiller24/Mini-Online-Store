@@ -11,8 +11,9 @@ export const products = {
   PRODUCTS: "/products",
   PRODUCT_CREATE: "/product/create",
   PRODUCT: "/product/", // requires id "/product/{id}"
-  PRODUCT_UPDATE: "/product/update",
-  PRODUCT_DELETE: "/product/delete",
+  PRODUCT_UPDATE: "/product/update/",
+  PRODUCT_DELETE: "/product/delete/",
+  PRODUCT_RESTOCK: "/product/restock/",
 };
 
 export const carts = {
@@ -27,3 +28,5 @@ export const transactions = {
   TRANSACTION_CREATE: "/transaction/create",
   TRANSACTIION_UPDATE: "/transaction/update",
 };
+
+export const ADMIN_INDEX = "/admin";

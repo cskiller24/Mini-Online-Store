@@ -114,10 +114,6 @@ class ProductController extends Controller
             ], 404);
         }
 
-        if($product->image !== self::NOT_AVAILABLE_IMAGE) {
-            Storage::disk('public')->delete('image/'. $product->image);
-        }
-
         if($request->has('name') && $request->name !== null) {
             $product->name = $request->name;
         }
@@ -125,10 +121,11 @@ class ProductController extends Controller
             $product->price = $request->price;
         }
         if($request->has('image') && $request->file('image') !== null) {
+            Storage::disk('public')->delete('image/'. $product->image);
             $product->image = uniqid().'-'.$file->getClientOriginalName();
+            $file->storeAs('public/image', $product->image);
         }
         $product->save();
-        $file->storeAs('public/image', $product->image);
 
         return response()->json([
             'message' => 'Successfully update product',
